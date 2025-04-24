@@ -1,8 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const multer = require('multer');
 const connectDB = require('./src/config/db');
-const authRoutes = require('./src/routes/authRoutes');
+const authRoutes = require('./src/routes/admin-auth/admin-auth.routes');
 
 const app = express();
 
@@ -11,6 +12,8 @@ connectDB();
 
 // Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(multer().none()); // Add this line to handle form-data
 
 // Routes
 app.use('/api/auth', authRoutes);

@@ -1,4 +1,4 @@
-const User = require("../models/User");
+const User = require("../models/admin-auth.model");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 
