@@ -1,16 +1,5 @@
 export const isValidDate = (date) => /^\d{4}-\d{2}-\d{2}$/.test(date);
 
-// export const checkStartDate = (filter) => {
-//   if (!filter.startDate) {
-//     throw new Error("Start date is required.");
-//   }
-//   if (!isValidDate(filter.startDate)) {
-//     throw new Error(
-//       'The "startDate" key must be a valid date string in the format YYYY-MM-DD',
-//     );
-//   }
-// };
-
 export const validateKeyPresence = (filter, key, errorMessage) => {
   if (
     Object.prototype.hasOwnProperty.call(filter, key) &&

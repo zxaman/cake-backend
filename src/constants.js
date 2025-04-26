@@ -19,4 +19,8 @@ export const GenderEnum = Object.freeze({
 
 export const SchemaNameEnum = Object.freeze({
   USER: "users",
+  PRODUCT: "products",
+  CART: "carts",
+  ORDER: "orders",
+  CATEGORY:"categories"
 });

@@ -8,16 +8,11 @@ import {
   SchemaNameEnum,
   UserRolesEnum,
   UserStatusEnum,
-  GenderEnum,
 } from "../constants.js";
 
 const userSchema = new Schema(
   {
-    firstName: {
-      type: String,
-      required: true,
-    },
-    lastName: {
+    fullname: {
       type: String,
       required: true,
     },
@@ -32,28 +27,6 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
-    },
-    mobileNo: {
-      type: String,
-      required: true,
-    },
-    dob: {
-      type: Date,
-      required: true,
-    },
-    gender: {
-      type: String,
-      enum: Object.values(GenderEnum),
-      required: true,
-    },
-    address: {
-      type: String,
-      required: true,
-    },
-    employeeId: {
-      type: String,
-      required: true,
-      unique: true,
     },
     userStatus: {
       type: String,
@@ -108,26 +81,10 @@ const userSchema = new Schema(
         return { unHashedToken, hashedToken, tokenExpiry };
       },
     },
-    virtuals: {
-      fullName: {
-        get() {
-          return `${this.firstName} ${this.lastName}`;
-        },
-      },
-    },
   },
 );
 
-// userSchema.pre("save", async function (next) {
-//   if (!this.isModified("password")) return next();
-//   this.password = bcrypt.hashSync(this.password, 10);
-//   next();
-// });
-
 userSchema.pre("save", async function (next) {
-  if (this.isModified("dob") && typeof this.dob === "string") {
-    this.dob = new Date(this.dob);
-  }
 
   if (this.isModified("password")) {
     this.password = bcrypt.hashSync(this.password, 10);

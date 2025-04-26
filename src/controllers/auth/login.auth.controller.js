@@ -16,7 +16,7 @@ const login = asyncHandler(async (req, res) => {
   }
   const token = await generateAuthToken(user._id);
   const loggedInUser = await User.findById(user._id).select(
-    "firstName lastName email mobileNo userRole",
+    "fullName email userRole",
   );
   return res
     .status(200)

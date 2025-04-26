@@ -5,14 +5,9 @@ import { ApiError } from "../../utils/ApiError.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 
 const updateCurrentUser = asyncHandler(async (req, res) => {
-  const { _id: userId, userRole } = req.user;
-  const { mobileNo, address } = req.body;
+  const { _id: userId } = req.user;
 
-  const updateData =
-    userRole === UserRolesEnum.ADMIN ||
-    userRole === UserRolesEnum.APPLICATION_ADMIN
-      ? { ...req.body }
-      : { mobileNo, address };
+  const updateData = { ...req.body }
 
   const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
     new: true,

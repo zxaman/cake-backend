@@ -4,50 +4,32 @@ import { UserRolesEnum } from "../../constants.js";
 import accessControl from "../../middlewares/access-control.middleware.js";
 import { uploads } from "../../middlewares/multer.middleware.js";
 import updateCurrentUserValidator from "../../validators/user/update-current-user.user.validator.js";
-import updateUserValidator from "../../validators/user/update-user.user.validator.js";
 
 import {
   addUser,
-  addUsersInBulk,
   getCurrentUser,
-  getAllUsers,
   changePassword,
   updateAvatar,
   updateCurrentUser,
-  updateUser,
   getUserById,
 } from "../../controllers/user/index.user.controller.js";
 import {
   getAllUsersValidator,
   addUserValidator,
-  changePasswordValidator,
-  addUsersValidator,
+  changePasswordValidator
 } from "../../validators/user/index.user.validator.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
 
 const router = Router();
 
 router.post(
   "/add",
-  accessControl([UserRolesEnum.ADMIN, UserRolesEnum.APPLICATION_ADMIN]),
   addUserValidator(),
   validate,
   addUser,
 );
-router.post(
-  "/addUsers",
-  accessControl([UserRolesEnum.ADMIN, UserRolesEnum.APPLICATION_ADMIN]),
-  addUsersValidator(),
-  validate,
-  addUsersInBulk,
-);
-router.get("/current-user", getCurrentUser);
-router.post(
-  "/getAll",
-  accessControl([UserRolesEnum.ADMIN, UserRolesEnum.APPLICATION_ADMIN]),
-  getAllUsersValidator(),
-  validate,
-  getAllUsers,
-);
+
+router.get("/current-user", verifyJWT, getCurrentUser);
 
 router.get(
   "/:userId",
@@ -62,14 +44,6 @@ router.patch(
   changePasswordValidator(),
   validate,
   changePassword,
-);
-
-router.patch(
-  "/update/:userId",
-  accessControl([UserRolesEnum.ADMIN, UserRolesEnum.APPLICATION_ADMIN]),
-  updateUserValidator(),
-  validate,
-  updateUser,
 );
 
 const avatarFilter = (req, file, cb) => {

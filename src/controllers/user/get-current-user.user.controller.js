@@ -3,6 +3,7 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 
 const getCurrentUser = asyncHandler(async (req, res) => {
+  console.log("useerrrrrrrrrrrr", req.user)
   let userId = req.user._id;
 
   const user = await User.findById(userId).select(
