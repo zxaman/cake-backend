@@ -1,0 +1,88 @@
+admin-auth
+TO REGISTER
+to check in postman go in body tab and select form-data and write the key value form
+
+  name: amank1
+  email : amank1@email.com
+  password : yourpassword
+
+
+api url
+http://localhost:5000/api/auth/register
+method: post
+
+
+TO LOGIN
+  email : amank1@email.com
+  password : yourpassword
+api url 
+http://localhost:5000/api/auth/login
+method: post
+
+TO CHECK REGISTERED USER DETAILS WHETHER THE USER IS LOGGED IN OR NOT
+Authorization: token value which you will get when you will use login api
+
+url
+http://localhost:5000/api/auth/me
+method: get
+
+
+
+FOR CAKE
+1. Create Cake
+- URL: http://localhost:5000/api/cakes
+- Method: POST
+- Body (form-data)
+name: Red Velvet Cake
+price: 600
+description: Classic red velvet with cream cheese frosting
+flavors: red-velvet,cream-cheese
+image: (select cake image file)
+
+
+
+2. Get All Cakes (with filters)
+- URL: http://localhost:5000/api/cakes
+- Method: GET
+
+
+
+
+
+3. Get Single Cake
+- URL: http://localhost:5000/api/cakes/:id
+- Method: GET
+- Example: http://localhost:5000/api/cakes/65a1b2c3d4e5f6a7b8c9d0e1
+
+
+
+
+4. Update Cake
+- URL: http://localhost:5000/api/cakes/:id
+- Method: PUT
+- Example: http://localhost:5000/api/cakes/65a1b2c3d4e5f6a7b8c9d0e1
+- Body (form-data):
+
+name: Updated Cake Name
+price: 650
+description: Updated description
+flavors: chocolate,vanilla
+image: (select new image file if needed)
+
+
+
+
+5. Delete Cake
+- URL: http://localhost:5000/api/cakes/:id
+- Method: DELETE
+- Example: http://localhost:5000/api/cakes/65a1b2c3d4e5f6a7b8c9d0e1
+
+
+
+6. Get Categories
+- URL: http://localhost:5000/api/cakes/categories
+- Method: GET
+
+
+
+

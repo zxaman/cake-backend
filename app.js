@@ -1,49 +1,51 @@
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer');
-const path = require('path');
-const connectDB = require('./src/config/db');
-const authRoutes = require('./src/routes/admin-auth/admin-auth.routes');
-const cakeRoutes = require('./src/routes/cake/cake.routes'); // Fixed path
+const cors = require('cors'); // Add this line
+require('dotenv').config();
 
 const app = express();
 
-// Configure multer for handling file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
+// CORS Middleware - Add this before other middleware
+app.use(cors({
+    origin: 'http://localhost:8080', // Your React app URL
+    credentials: true
+}));
 
-const upload = multer({ 
-  storage: storage,
-  fileFilter: function (req, file, cb) {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Not an image! Please upload only images.'), false);
-    }
-  }
-});
-
-// Connect to Database
-connectDB();
-
-// Middleware
+// Other Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Multer middleware for handling form-data
+const upload = multer();
+// Remove this line:
+// app.use(upload.none());
+
+// Keep the rest of your middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Create uploads directory if it doesn't exist
+const fs = require('fs');
+const path = require('path');
+
+// Create uploads directory if it doesn't exist
+const uploadDir = path.join(__dirname, 'uploads', 'products');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Serve static files from uploads directory
 app.use('/uploads', express.static('uploads'));
 
 // Routes
-// Change the route path from /api/auth to /api/user
-app.use('/api/user', authRoutes);
-app.use('/api/cakes', cakeRoutes);
+app.use('/api/user', require('./src/routes/user-auth/user-auth.routes'));
+app.use('/api/products', require('./src/routes/product/product.routes'));
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log('MongoDB Connected'))
+    .catch(err => console.log(err));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
