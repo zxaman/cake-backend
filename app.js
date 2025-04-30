@@ -1,14 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const multer = require('multer');
-const cors = require('cors'); // Add this line
+const multer = require('multer'); // Keep only one declaration
+const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
 
-// CORS Middleware - Add this before other middleware
+// CORS Middleware
 app.use(cors({
-    origin: 'http://localhost:8080', // Your React app URL
+    origin: 'http://localhost:8080',
     credentials: true
 }));
 
@@ -16,30 +16,11 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Multer middleware for handling form-data
+// Multer setup
 const upload = multer();
-// Remove this line:
-// app.use(upload.none());
 
-// Keep the rest of your middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Create uploads directory if it doesn't exist
-const fs = require('fs');
-const path = require('path');
-
-// Create uploads directory if it doesn't exist
-const uploadDir = path.join(__dirname, 'uploads', 'products');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Serve static files from uploads directory
-app.use('/uploads', express.static('uploads'));
-
-// Routes
-app.use('/api/user', require('./src/routes/user-auth/user-auth.routes'));
+// Routes with form-data support
+app.use('/api/user', upload.none(), require('./src/routes/user-auth/user-auth.routes'));
 app.use('/api/products', require('./src/routes/product/product.routes'));
 
 // Connect to MongoDB
