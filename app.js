@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
 const multer = require('multer'); // Keep only one declaration
 const cors = require('cors');
@@ -27,6 +28,9 @@ app.use('/api/products', require('./src/routes/product/product.routes'));
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
+
+// Add this after other middleware but before routes
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
